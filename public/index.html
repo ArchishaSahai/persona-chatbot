@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona Chat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Persona Selection Screen -->
+        <div id="selection-screen">
+            <h1 class="selection-title">Choose Your Mentor</h1>
+            <div class="selection-container">
+                <!-- Hitesh Card -->
+                <div class="persona-card hitesh-theme">
+                    <div class="avatar-circle hitesh-gradient">H</div>
+                    <h3>Hitesh</h3>
+                    <p class="tagline-blue">The Calm Mentor</p>
+                    <div class="traits">
+                        <span class="trait-pill hitesh-pill">Thoughtful</span>
+                        <span class="trait-pill hitesh-pill">Clear</span>
+                        <span class="trait-pill hitesh-pill">Patient</span>
+                    </div>
+                    <p class="description">Guiding you from zero to production-ready with deep technical wisdom and patience.</p>
+                    <button class="chat-with-btn hitesh-btn" onclick="startChat('hitesh')">Chat with Hitesh</button>
+                </div>
+
+                <!-- Piyush Card -->
+                <div class="persona-card piyush-theme">
+                    <div class="avatar-circle piyush-gradient">P</div>
+                    <h3>Piyush</h3>
+                    <p class="tagline-orange">The Energetic Expert</p>
+                    <div class="traits">
+                        <span class="trait-pill piyush-pill">Bold</span>
+                        <span class="trait-pill piyush-pill">Fast</span>
+                        <span class="trait-pill piyush-pill">Motivating</span>
+                    </div>
+                    <p class="description">High-energy, direct, and action-oriented mentorship to keep you moving.</p>
+                    <button class="chat-with-btn piyush-btn" onclick="startChat('piyush')">Chat with Piyush</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Interface -->
+        <main id="chat-container" style="display: none;">
+            <header>
+                <div class="persona-header-info">
+                    <div class="avatar-small hitesh-gradient" id="header-avatar">H</div>
+                    <div class="header-text">
+                        <span id="header-name">Hitesh</span>
+                        <span id="header-tagline" class="tagline-blue">The Calm Mentor</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="persona-toggle">
+                        <button id="hitesh-btn" class="active">Hitesh</button>
+                        <button id="piyush-btn">Piyush</button>
+                    </div>
+                    <button id="new-chat-btn" title="New Chat">+ New Chat</button>
+                </div>
+            </header>
+            <div id="chat-messages"></div>
+            <footer>
+                <div class="input-wrapper">
+                    <input type="text" id="user-input" placeholder="Message Mentors..." autocomplete="off">
+                    <button id="send-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </footer>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

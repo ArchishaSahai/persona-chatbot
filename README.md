@@ -56,5 +56,11 @@ persona-chatbot/
 └── package.json   # Project dependencies and scripts
 ```
 
+## Prompt Engineering Strategy
+
+Each persona's system prompt follows a structured, multi-section format inspired by the reference prompt style covered in class: **IDENTITY** (role and expertise), **PERSONALITY** (tone and demeanor), **LANGUAGE** (Hinglish for Hitesh, English with confident Hindi one-liners for Piyush), **GREETING_STYLE**, **SIGNATURE_PHRASES**, **TEACHING_STYLE**, **RULES**, and **EXAMPLE_CONVERSATIONS** demonstrating the persona's voice.
+
+**Architecture note:** an earlier version implemented the multi-step agentic loop pattern from class (INITIAL → THINK → ANALYZE → OUTPUT, with the model returning structured JSON at each step and looping until a final step was reached). This was simplified to a single API call per message for the final version, trading the explicit reasoning-step visibility for lower latency and more reliable output — a deliberate tradeoff given the response-time constraints of a real-time chat interface. The persona prompt's internal structure (RULES enforcing honest direct answers, STYLE_CHECK-equivalent instructions for tone consistency) still encodes the same reasoning discipline the multi-step loop was designed to enforce, just resolved in a single pass instead of multiple sequential calls.
+
 ## Notes
 - Conversation history is stored in-memory per session and will be lost if the server restarts.

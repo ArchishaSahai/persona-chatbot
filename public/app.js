@@ -23,14 +23,16 @@ const PERSONA_DATA = {
         tagline: 'The Calm Mentor',
         accentClass: 'hitesh-active',
         avatarClass: 'hitesh-gradient',
-        taglineClass: 'tagline-blue'
+        taglineClass: 'tagline-blue',
+        image: 'images/hitesh.png'
     },
     piyush: {
         name: 'Piyush',
         tagline: 'The Energetic Expert',
         accentClass: 'piyush-active',
         avatarClass: 'piyush-gradient',
-        taglineClass: 'tagline-orange'
+        taglineClass: 'tagline-orange',
+        image: 'images/piyush.webp'
     }
 };
 
@@ -43,10 +45,10 @@ function updateHeader() {
     headerName.textContent = data.name;
     headerTagline.textContent = data.tagline;
     headerTagline.className = data.taglineClass;
-    
+
     // Reset avatar classes and set new one
     headerAvatar.className = `avatar-small ${data.avatarClass}`;
-    headerAvatar.textContent = data.name[0];
+    headerAvatar.src = data.image;
 }
 
 window.startChat = async (persona) => {
@@ -142,16 +144,62 @@ function appendMessage(text, sender) {
         div.classList.add(`${currentPersona}-active`);
     } else {
         // Add bot avatar
-        const avatar = document.createElement('div');
+        const avatar = document.createElement('img');
         avatar.classList.add('bot-avatar', PERSONA_DATA[currentPersona].avatarClass);
-        avatar.textContent = PERSONA_DATA[currentPersona].name[0];
+        avatar.src = PERSONA_DATA[currentPersona].image;
         div.appendChild(avatar);
     }
 
     const content = document.createElement('div');
-    content.textContent = text;
+    content.classList.add('message-content');
+
+    // Regex to match markdown code blocks: ```lang code ```
+    const codeBlockRegex = /```(\w+)?\s*([\s\S]*?)```/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = codeBlockRegex.exec(text)) !== null) {
+        // Add plain text before the code block
+        if (match.index > lastIndex) {
+            const plainText = text.slice(lastIndex, match.index);
+            content.appendChild(document.createTextNode(plainText));
+        }
+
+        const codeContent = match[2].trim();
+
+        // Create the code block container
+        const pre = document.createElement('pre');
+        pre.classList.add('code-block');
+
+        // Add Copy Button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.onclick = () => {
+            navigator.clipboard.writeText(codeContent).then(() => {
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
+            });
+        };
+        pre.appendChild(copyBtn);
+
+        const code = document.createElement('code');
+        if (match[1]) {
+            code.classList.add(`language-${match[1]}`);
+        }
+        code.textContent = codeContent;
+        pre.appendChild(code);
+        content.appendChild(pre);
+
+        lastIndex = codeBlockRegex.lastIndex;
+    }
+
+    // Add remaining text after the last code block
+    if (lastIndex < text.length) {
+        content.appendChild(document.createTextNode(text.slice(lastIndex)));
+    }
+
     div.appendChild(content);
-    
     messagesContainer.appendChild(div);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }

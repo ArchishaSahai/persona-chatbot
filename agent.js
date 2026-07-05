@@ -47,7 +47,21 @@ export async function generateReply(userMessage, sessionId, persona = AGENT_STAT
       messages: conversationHistory[sessionId],
     });
 
-    const reply = response.choices[0].message.content;
+    const replyRaw = response.choices[0].message.content;
+    let reply = replyRaw.trim();
+
+    // Handle potential JSON response (for personas like Hitesh)
+    if (reply.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(reply);
+        if (parsed && typeof parsed.text === 'string') {
+          reply = parsed.text.trim();
+        }
+      } catch (e) {
+        console.warn('Failed to parse JSON response, falling back to raw text:', e);
+      }
+    }
+    // Do not strip triple backticks; let the frontend handle markdown rendering.
 
     conversationHistory[sessionId].push({ role: 'assistant', content: reply });
 
